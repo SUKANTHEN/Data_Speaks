@@ -45,7 +45,8 @@ class data_analytics:
         print('6) Missing Values Estimation        :')
         for i in data.columns:
             if data[i].isna().sum()>0:
-                print('The Column ',i,' has '+ str(data[i].isna().sum()) + ' missing values')
+                print(' >> The Column ',i,' has '+ str(data[i].isna().sum()) + ' missing values')
+        print('7) Percentage of Total Missing Values :',(data.isnull().sum().sum()/(data.shape[0]*data.shape[1]))*100)
 text2 = "Here is a basic analytics report of the Dataset"
 engine.say(text2)
 engine.runAndWait()
@@ -64,7 +65,7 @@ def text_analysis(feature):
         engine.runAndWait()
         n = int(input('Enter the range to print the most repeated Data :'))
         a= data[feature].value_counts().head(n)
-        b= data[feature].value_counts().head(n)
+        b= data[feature].value_counts().tail(n)
         print(a)
         print(b)
         
@@ -101,8 +102,21 @@ else:
 # **************** Conditions for Classification *******************
 # Target variable Analysis
 colname = input('Enter the Target feature name :')
+a = len(data[colname].value_counts())
+#lst1 = []
+#if a == 2:
+ #   for i in data[colname].value_counts():
+
+  #      lst1.append(i)
+   #     count_1 = sum(data[colname]==lst[0])
+    #    count_2 = sum(data[colname]==lst[1])
+     #   if (count_1 / count_2) >= 2 or (count_2 / count_1) >= 2:
+      #      print('This is an Imbalanced Dataset')
+       # elif (count_1 / count_2) == 1:
+        #    print('This is a perfectly Balanced Dataset')
+        #else:
+            #print('This is a Balanced Dataset')
 if colname in data.columns:
-    a = len(data[colname].value_counts())
     if a == 2 and data[colname].dtypes == 'int64':
         print('This is a BINARY CLASSIFICATION problem !!')
         out_bc = "This Dataset holds for a Binary Classification Problem. Go on to build a Binary Classifier !"
