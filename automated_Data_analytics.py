@@ -1,3 +1,5 @@
+#pip install xlrd
+#pip install pyttsx3
 import pandas as pd
 import sklearn
 import pyttsx3
@@ -56,17 +58,35 @@ for feature in data.columns:
     lst.append(feature)
 print('7) These are the following features or Columns in the Dataset :')
 print(lst)
+def text_analysis(feature):
+    if len(data[feature].value_counts()) < data.shape[0]:
+        engine.say('Enter the range you want to print top and bottom repeated values:')
+        engine.runAndWait()
+        n = int(input('Enter the range to print the most repeated Data :'))
+        a= data[feature].value_counts().head(n)
+        b= data[feature].value_counts().head(n)
+        print(a)
+        print(b)
+        
 def feature_analysis():
     text3 = "Hey, Do u want to understand what's in your data ? Just enter the column you want to Analyze !"
     engine.say(text3)
     engine.runAndWait()
     feature = input('Enter the feature/column name :')
     if feature in data.columns:
-        print(f'{feature} has maximum value of {data[feature].max()}')
-        print(f'{feature} has a minimum value of {data[feature].min()}')
-        text_4 = f" The {feature} has maximum value of {data[feature].max()} and minimum value of {data[feature].min()}"
-        engine.say(text_4)
-        engine.runAndWait()
+        if data[feature].dtypes == 'O':
+            text_analysis(feature)
+        else:
+            print(f'{feature} has maximum value of {data[feature].max()}')
+            print(f'{feature} has a minimum value of {data[feature].min()}')
+            text_4 = f" The {feature} has maximum value of {data[feature].max()} and minimum value of {data[feature].min()}. here is the list of most repeated values and least repeated values"
+            engine.say(text_4)
+            engine.runAndWait()
+            print('Most repeated values:')
+            print(data[feature].value_counts().head(5))
+            print('Least repeated values:')
+            print(data[feature].value_counts().tail(5))
+            
 print(feature_analysis())
 text_5 = "Do you want to do the same for other column ? Type 'yes' if u want to or 'no' if u want to skip and go to next features !"
 engine.say(text_5)
@@ -83,13 +103,13 @@ else:
 colname = input('Enter the Target feature name :')
 if colname in data.columns:
     a = len(data[colname].value_counts())
-    if a == 2:
+    if a == 2 and data[colname].dtypes == 'int64':
         print('This is a BINARY CLASSIFICATION problem !!')
         out_bc = "This Dataset holds for a Binary Classification Problem. Go on to build a Binary Classifier !"
         engine.say(out_bc)
         engine.runAndWait()
-    elif a==1 or a==0:
-        print('Not Enough Data')
+    elif (a==1 or a==0) and a/data.shape[0] >= 0.8:
+        print('Not enough data to day whether it is a classification or regression.')
         out_nc = "Oh My God ! This is impossible to find whether is Classification or regression problem statement"
         engine.say(out_nc)
         engine.runAndWait()
