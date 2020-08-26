@@ -42,11 +42,13 @@ class data_analytics:
         cat_features = [c for c in data.columns if data[c].dtypes=='O']
         print('5) Count of Categorical Features    :',len(cat_features))
     def missing_values(self,data):
-        print('6) Missing Values Estimation        :')
+        print('6.1) Total Missing Values in the dataset:',(data.isnull().sum().sum()))
+        print('6.2) Percentage of Total Missing Values :',(data.isnull().sum().sum()/(data.shape[0]*data.shape[1]))*100)
+        print('6.3) Missing Values Estimation          :')
         for i in data.columns:
             if data[i].isna().sum()>0:
                 print(' >> The Column ',i,' has '+ str(data[i].isna().sum()) + ' missing values')
-        print('7) Percentage of Total Missing Values :',(data.isnull().sum().sum()/(data.shape[0]*data.shape[1]))*100)
+              
 text2 = "Here is a basic analytics report of the Dataset"
 engine.say(text2)
 engine.runAndWait()
@@ -94,10 +96,9 @@ engine.say(text_5)
 engine.runAndWait()
 query_1 = input(" Enter 'yes' or 'no' !")
 query_1v = query_1.lower()
-if query_1v == 'yes':
-    print(feature_analysis())
-else:
-    print('Hope that was the best for you !!')
+query_1v = 'yes'
+while query_1v == 'no':
+    print(feature_analysis)
 #Classifier or regressor
 # **************** Conditions for Classification *******************
 # Target variable Analysis
